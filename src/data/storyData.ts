@@ -59,13 +59,19 @@ export interface StoryRetellCard {
   imageKey: string;
 }
 
-// Images generated via generate_image
+import coverImg from '../assets/images/cover_the_lost_hat_1790907042008.jpg';
+import windImg from '../assets/images/story_scene_wind_blows_1790907056094.jpg';
+import pondImg from '../assets/images/story_scene_duck_pond_1790907070141.jpg';
+import birdImg from '../assets/images/story_scene_bird_tree_1790907081042.jpg';
+import badgeImg from '../assets/images/badge_story_explorer_1790907091094.jpg';
+
+// Images bundled and supported on both dev and production (Vercel)
 export const STORY_IMAGES = {
-  cover: '/src/assets/images/cover_the_lost_hat_1790907042008.jpg',
-  wind: '/src/assets/images/story_scene_wind_blows_1790907056094.jpg',
-  pond: '/src/assets/images/story_scene_duck_pond_1790907070141.jpg',
-  bird: '/src/assets/images/story_scene_bird_tree_1790907081042.jpg',
-  badge: '/src/assets/images/badge_story_explorer_1790907091094.jpg',
+  cover: coverImg,
+  wind: windImg,
+  pond: pondImg,
+  bird: birdImg,
+  badge: badgeImg,
 };
 
 // Global picture glossary for 3rd-4th grade learners (CEFR Pre-A1 to A1)
