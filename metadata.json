@@ -1,0 +1,6 @@
+{
+  "name": "StoryWalk! - Interactive English Picture Book",
+  "description": "A guided read-along picture book reader for 3rd–4th grade English learners featuring 'The Lost Hat' with audio highlighting, picture glossary, and interactive comprehension.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
