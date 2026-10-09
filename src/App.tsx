@@ -10,6 +10,8 @@ import { StoryPageScreen } from './components/StoryPageScreen';
 import { QuestionScreen } from './components/QuestionScreen';
 import { ResultScreen } from './components/ResultScreen';
 import { StoryMapRetell } from './components/StoryMapRetell';
+import { WholeStoryScreen } from './components/WholeStoryScreen';
+import { TheEndScreen } from './components/TheEndScreen';
 import { GlossaryModal } from './components/GlossaryModal';
 import { StorySelectorModal } from './components/StorySelectorModal';
 import { CertificateModal } from './components/CertificateModal';
@@ -21,7 +23,7 @@ import {
 } from './data/storyData';
 import { stopSpeaking, playSoundEffect } from './utils/audioEngine';
 
-type AppScreen = 'cover' | 'story' | 'question' | 'retell' | 'result';
+type AppScreen = 'cover' | 'story' | 'question' | 'retell' | 'result' | 'whole-story' | 'the-end';
 
 export default function App() {
   const [screen, setScreen] = useState<AppScreen>('cover');
@@ -55,6 +57,12 @@ export default function App() {
     setCurrentPageIndex(0);
     setScore(0);
     setScreen('story');
+  };
+
+  const handleStartWholeStory = () => {
+    stopSpeaking();
+    setCurrentPageIndex(0);
+    setScreen('whole-story');
   };
 
   const handleProceedToQuestion = () => {
@@ -102,7 +110,11 @@ export default function App() {
     stopSpeaking();
     playSoundEffect('pageFlip');
     setCurrentPageIndex(pageIndex);
-    setScreen('story');
+    if (screen === 'whole-story') {
+      setScreen('whole-story');
+    } else {
+      setScreen('story');
+    }
   };
 
   const handleJumpToResult = () => {
@@ -153,7 +165,7 @@ export default function App() {
         onJumpToPage={handleJumpToPage}
         onJumpToResult={handleJumpToResult}
         isResultScreen={screen === 'result'}
-        showProgress={screen === 'story' || screen === 'question' || screen === 'result'}
+        showProgress={screen === 'story' || screen === 'question' || screen === 'result' || screen === 'whole-story'}
       />
 
       {/* Main Screen Content View */}
@@ -161,7 +173,37 @@ export default function App() {
         {screen === 'cover' && (
           <CoverScreen
             onStartStory={handleStartStory}
+            onListenToWholeStory={handleStartWholeStory}
             onOpenGuide={() => setShowTeacherGuide(true)}
+          />
+        )}
+
+        {/* Continuous Autoplay Narration for the Whole Story */}
+        {screen === 'whole-story' && (
+          <WholeStoryScreen
+            key={`whole-story-page-${currentPageIndex}`}
+            pageIndex={currentPageIndex}
+            totalPages={totalPages}
+            onPageChange={(nextIdx) => {
+              stopSpeaking();
+              setCurrentPageIndex(nextIdx);
+            }}
+            onFinishStory={() => setScreen('the-end')}
+            onStopToCover={handleResetToCover}
+            onOpenGlossary={(item) => setActiveGlossaryItem(item)}
+          />
+        )}
+
+        {/* The End Celebration Screen */}
+        {screen === 'the-end' && (
+          <TheEndScreen
+            onListenAgain={() => {
+              stopSpeaking();
+              setCurrentPageIndex(0);
+              setScreen('whole-story');
+            }}
+            onBackToCover={handleResetToCover}
+            onStartInteractiveQuiz={handleStartStory}
           />
         )}
 

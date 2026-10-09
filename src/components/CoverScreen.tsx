@@ -4,19 +4,29 @@
  */
 
 import React from 'react';
-import { Play, Sparkles, Volume2, Bookmark, CheckCircle2, ChevronRight, HelpCircle } from 'lucide-react';
+import { Play, Sparkles, Volume2, Bookmark, CheckCircle2, ChevronRight, HelpCircle, Headphones } from 'lucide-react';
 import { STORY_IMAGES } from '../data/storyData';
 import { playSoundEffect } from '../utils/audioEngine';
 
 interface CoverScreenProps {
   onStartStory: () => void;
+  onListenToWholeStory: () => void;
   onOpenGuide: () => void;
 }
 
-export const CoverScreen: React.FC<CoverScreenProps> = ({ onStartStory, onOpenGuide }) => {
+export const CoverScreen: React.FC<CoverScreenProps> = ({
+  onStartStory,
+  onListenToWholeStory,
+  onOpenGuide,
+}) => {
   const handleStart = () => {
     playSoundEffect('fanfare');
     onStartStory();
+  };
+
+  const handleWholeStoryClick = () => {
+    playSoundEffect('pop');
+    onListenToWholeStory();
   };
 
   return (
@@ -89,22 +99,33 @@ export const CoverScreen: React.FC<CoverScreenProps> = ({ onStartStory, onOpenGu
       </div>
 
       {/* Bottom CTA Zone */}
-      <div className="w-full max-w-[380px] mx-auto pb-4 space-y-2.5">
+      <div className="w-full max-w-[380px] mx-auto pb-4 space-y-3">
+        {/* 1. Listen to the Whole Story Button */}
+        <button
+          onClick={handleWholeStoryClick}
+          className="w-full py-4 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-black text-lg sm:text-xl font-display shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2.5 transition-all group"
+        >
+          <Headphones className="w-6 h-6 group-hover:scale-110 transition-transform" />
+          <span>▶ Listen to the Whole Story</span>
+        </button>
+
+        {/* 2. Start Story Button (Interactive with questions) */}
         <button
           onClick={handleStart}
-          className="w-full py-4 px-6 rounded-2xl bg-amber-500 hover:bg-amber-600 active:scale-[0.98] text-white font-extrabold text-lg sm:text-xl font-display shadow-lg shadow-amber-500/30 flex items-center justify-center gap-2.5 transition-all group"
+          className="w-full py-3.5 px-6 rounded-2xl bg-amber-500 hover:bg-amber-600 active:scale-[0.98] text-white font-extrabold text-base sm:text-lg font-display shadow-md shadow-amber-500/25 flex items-center justify-center gap-2.5 transition-all group"
         >
-          <Play className="w-6 h-6 fill-current group-hover:scale-110 transition-transform" />
+          <Play className="w-5 h-5 fill-current group-hover:scale-110 transition-transform" />
           <span>Start Story</span>
           <ChevronRight className="w-5 h-5 ml-1" />
         </button>
 
+        {/* Teacher/Parent Guide */}
         <button
           onClick={() => {
             playSoundEffect('pop');
             onOpenGuide();
           }}
-          className="w-full py-2.5 px-4 text-xs font-bold text-amber-900/80 hover:text-amber-950 hover:bg-amber-100/50 rounded-xl transition-colors flex items-center justify-center gap-1.5"
+          className="w-full py-2 px-4 text-xs font-bold text-amber-900/80 hover:text-amber-950 hover:bg-amber-100/50 rounded-xl transition-colors flex items-center justify-center gap-1.5"
         >
           <HelpCircle className="w-4 h-4 text-amber-700" />
           <span>View Can-Do Learning Objective & Sight Words</span>
